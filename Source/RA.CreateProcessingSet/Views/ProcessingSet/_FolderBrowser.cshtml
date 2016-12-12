@@ -1,0 +1,26 @@
+﻿@model RA.CreateProcessingSet.Models.ProcessingSetModel
+@{
+    ViewBag.Title = "Select a source path";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Init
+{
+    ProcessingSetFolderBrowser.URLBrowse = '@Url.Action("Browse", "ProcessingSet", new { AppID = Request.QueryString["AppID"], StandardsCompliance = true })'
+    ProcessingSetFolderBrowser.URLGetFolders = '@Url.Action("GetSubFolders", "ProcessingSet", new { AppID = Request.QueryString["AppID"], StandardsCompliance = true })'
+    ProcessingSetFolderBrowser.init();
+}
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jquery-treeview-async-0.1.0.js")" type="text/javascript"></script>
+}
+
+<div class="form-group">
+    <div class="col-md-12" id="dvFolderTree">
+        <ul id="GetSubFolders" class="filetree"></ul>
+        <br />
+    </div>
+</div>
+@*loading*@
+<div id="modalPopupLoading"></div>
+@Html.HiddenFor(model => model.SelectedSourcePath, new { @id = "selectedFolder", @class = "form-control" })

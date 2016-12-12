@@ -1,0 +1,28 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Scripts.Render("~/processingSetJS")
+    @Styles.Render("~/Content/Bootstrap")
+    @Styles.Render("~/Content/ProcessingSet")
+    @Styles.Render("~/Content/TreeView/bundle")
+
+    @if (IsSectionDefined("Init"))
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                @RenderSection("Init", false)
+            });
+        </script>
+    }
+
+</head>
+<body>
+    @RenderBody()
+    @RenderSection("Scripts", false)
+
+</body>
+</html>

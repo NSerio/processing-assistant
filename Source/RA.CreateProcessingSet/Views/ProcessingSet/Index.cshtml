@@ -1,0 +1,123 @@
+﻿@model RA.CreateProcessingSet.Models.ProcessingSetModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Init
+{
+    ProcessingSetIndex.URLHome = '@Url.Action("Index", "ProcessingSet")';
+    ProcessingSetIndex.URLBrowse = '@Url.Action("Browse", "ProcessingSet", new { AppID = Request.QueryString["AppID"], StandardsCompliance = true })'
+    ProcessingSetIndex.URLGetFolders = '@Url.Action("GetSubFolders", "ProcessingSet", new { AppID = Request.QueryString["AppID"], StandardsCompliance = true })'
+    ProcessingSetIndex.URLGetCustodianSummary = '@Url.Action("CustodianSummaryAtLevel", "ProcessingSet", new { AppID = Request.QueryString["AppID"], StandardsCompliance = true })'
+    ProcessingSetIndex.init();
+}
+
+<div class="container" id="dvIndex">
+    <br />
+    <form method="POST" role="form" class="form-horizontal" enctype="multipart/form-data" id="frmIndex">
+        @Html.ValidationSummary(true)
+        <h3 class="col-md-12">Processing Set Details</h3>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @maxlength = 255 })
+            </div>
+            <div class="col-md-4">
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedProfileArtifactId, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                @Html.DropDownListFor(model => model.SelectedProfileArtifactId, Model.ProfileItems, new { @class = "form-control" })
+            </div>
+            <div class="col-md-4">
+                @Html.ValidationMessageFor(model => model.SelectedProfileArtifactId)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FolderPath, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                <div class="input-group ">
+                    @Html.TextBoxFor(model => model.FolderPath, new { @class = "form-control", @id = "txtSourcePath", @readonly = true })
+                    <span class="input-group-addon" id="btnBrowse" style="cursor: pointer;"><i class="glyphicon glyphicon-folder-open"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.ValidationMessageFor(model => model.FolderPath)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Destination, new { @class = "col-md-2 control-label" })
+            <label class="radio-inline">
+                <input type="radio" name="Destination" id="destination1" checked value="1"> Custodian
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="Destination" id="destination2" value="2"> Project
+            </label>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustodianLevel, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.CustodianLevel, new { @class = "form-control", maxlength = 2})
+            </div>
+            <div class="col-md-4">
+                @Html.ValidationMessageFor(model => model.CustodianLevel)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailRecipients, new { @class = "col-md-2 control-label" })
+            <div class="col-md-6">
+                @Html.TextAreaFor(model => model.EmailRecipients, 2, 6, new { @class = "form-control", @placeholder = "Separate multiple email addresses by semi-colon" })
+            </div>
+        </div>
+        <div class="form-group" id="CustodianSummary" style="display:none;">
+            <div class="col-md-offset-2">
+                <strong>Custodian folders found:</strong>
+                <ul>
+                </ul>
+            </div>
+        </div> 
+        <div class="form-group">
+            <div class="col-md-offset-7">
+                <button type="submit" class="btn btn-primary" id="btnCreate" data-loading-text="Creating...">Create</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@* Select Source Path Modal Popup*@
+<div id="selectSourcePathModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySourcePathModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="mySourcePathModalLabel">Select a source path</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div id="dvNoSelectedSourcePath" class="field-validation-error"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.FolderPath, Model.FolderItems, new { @id = "folderList", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FolderPath)
+                </div>
+                <div class="form-group">
+                    <div id="dvProcessingSourceList">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top-width:0">
+                <button type="submit" class="btn btn-primary" id="btnOK" data-loading-text="Closing...">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*loading*@
+<div id="modal"></div>

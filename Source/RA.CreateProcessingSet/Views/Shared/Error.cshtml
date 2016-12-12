@@ -1,0 +1,40 @@
+﻿@model HandleErrorInfo
+@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Init
+{
+    ErrorIndex.URLHomeIndex = '@Url.Action("Index", "ProcessingSet", new { AppID = Request.QueryString["AppID"], StandardsCompliance = true })'
+    ErrorIndex.init();
+}
+
+<div class="container">
+    <br />
+    <div class="row">
+        <div class="col-md-10">
+            <h3>Error &nbsp; &nbsp;<span class="glyphicon glyphicon-thumbs-down"></span></h3>
+        </div>
+        <div class="col-md-2">
+            <div class="btn-toolbar pull-right">
+                <button id="btnReturn" class="btn btn-default">Return</button>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-danger">
+        <div class="panel-heading">An unexpected error has occurred. Please check the Errors tab for more information.</div>
+        <div class="panel-body">
+            @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+            {
+                <b>Exception:</b> @Model.Exception.Message<br />
+                <b>Controller:</b> @Model.ControllerName<br />
+                <b>Action:</b> @Model.ActionName<br />
+                <b>Stack Trace:</b> @Model.Exception.StackTrace
+            }
+        </div>
+    </div>
+</div>
+
+@*loading*@
+<div id="modal"></div>
