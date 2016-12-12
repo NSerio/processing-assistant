@@ -8,12 +8,3 @@ While this is an open source project on the kCura github account, there is no su
 
 NSerio is a major contributor to this project.  If you are interested in having modifications made to this project, please reach out to [NSerio](http://nserio.com) for an estimate. 
 
-
-# Project Setup
-This project requires references to kCura's Relativity® SDK dlls.  These dlls are not part of the open source project and must be obtained through kCura.  In the "packages" folder under "Source" you will need to create a "Relativity" folder if one does not exist.  You will need to add the following dlls:
-
-- kCura.Agent.dll
-- kCura.EventHandler.dll
-- kCura.Relativity.Client.dll
-- Relativity.API.dll
-- Relativity.CustomPages.dll
