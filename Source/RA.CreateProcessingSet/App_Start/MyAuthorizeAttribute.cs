@@ -11,7 +11,7 @@ namespace RA.CreateProcessingSet
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             var isAuthorized = false;
-            var workspaceID = WorkspaceIDFromContext(httpContext);
+            var workspaceID = WorkspaceFromContext.GetID(httpContext);
             if (workspaceID.HasValue)
 			{
 				var res = Rsapi.Tab.DoesUserHaveAccess(
@@ -24,21 +24,6 @@ namespace RA.CreateProcessingSet
 
 			return isAuthorized;
 		}
-
-        private int? WorkspaceIDFromContext (HttpContextBase httpContext)
-        {
-            string appIdQueryString = httpContext.Request.QueryString["AppID"];
-            int _workspaceId;
-            if(int.TryParse(appIdQueryString, out _workspaceId))
-            {
-                return _workspaceId;
-            }
-            if(httpContext.Session != null && httpContext.Session["WorkspaceID"] != null)
-            {
-                return (int)httpContext.Session["WorkspaceID"];
-            }
-            return null;
-        }
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
