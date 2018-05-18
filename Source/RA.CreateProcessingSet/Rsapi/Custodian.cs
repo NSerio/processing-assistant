@@ -57,7 +57,7 @@ namespace RA.CreateProcessingSet.Rsapi
                 if(destination == DestinationEnum.Custodian)
                 {
                     r.Fields.Add(new FieldValue(Helpers.Constants.Guids.Fields.Custodian.FirstName, firstName));
-                    r.Fields.Add(new FieldValue(Helpers.Constants.Guids.Fields.Custodian.LastName, lastName));
+                    r.Fields.Add(new FieldValue(Helpers.Constants.Guids.Fields.Custodian.LastName, lastName ?? firstName));
                     r.Fields.Add(new FieldValue(Helpers.Constants.Guids.Fields.Custodian.CustodianType,
                         Helpers.Constants.Guids.Choices.ProcessingSet.CustodianTypePerson));
                 }
